@@ -1,0 +1,11 @@
+---
+
+- include: install.yml
+  tags:
+    - rsnapshot
+    - rsnapshot_install
+
+- include: config.yml
+  tags:
+    - rsnapshot
+    - rsnapshot_config

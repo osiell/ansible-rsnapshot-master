@@ -1,0 +1,6 @@
+---
+
+- name: Install rsnapshot
+  apt:  pkg=rsnapshot
+        state=installed
+        update_cache=yes
