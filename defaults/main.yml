@@ -12,7 +12,7 @@ rsnapshot_config_no_create_root: 1
 rsnapshot_config_cmd_cp: /bin/cp
 rsnapshot_config_cmd_rm: /bin/rm
 rsnapshot_config_cmd_rsync: /usr/bin/rsync
-rsnapshot_config_cmd_ssh: False
+rsnapshot_config_cmd_ssh: /usr/bin/ssh
 rsnapshot_config_cmd_logger: /usr/bin/logger
 rsnapshot_config_cmd_du: False
 rsnapshot_config_cmd_rsnapshot_diff: False
@@ -29,19 +29,19 @@ rsnapshot_config_intervals:
       value: 3
 rsnapshot_config_verbose: 2
 rsnapshot_config_loglevel: 3
-rsnapshot_config_logfile: False
+rsnapshot_config_logfile: /var/log/rsnapshot.log
 rsnapshot_config_lockfile: /var/run/rsnapshot.pid
 rsnapshot_config_stop_on_stale_lockfile: 0
 rsnapshot_config_rsync_short_args: False
-rsnapshot_config_rsync_long_args: False
-rsnapshot_config_ssh_args: False
+rsnapshot_config_rsync_long_args: '--delete --numeric-ids --relative --delete-excluded --rsync-path=rsync-wrapper.sh'
+rsnapshot_config_ssh_args: '-i $HOME/.ssh/{{ rsnapshot_ssh_key }}'
 rsnapshot_config_du_args: False
 rsnapshot_config_one_fs: False
 rsnapshot_config_include: []
 rsnapshot_config_exclude: []
 rsnapshot_config_include_file: False
 rsnapshot_config_exclude_file: False
-rsnapshot_config_link_dest: 0
+rsnapshot_config_link_dest: 1
 rsnapshot_config_sync_first: 0
 rsnapshot_config_use_lazy_deletes: 0
 rsnapshot_config_rsync_numtries: 0
