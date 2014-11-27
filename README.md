@@ -119,9 +119,9 @@ rsnapshot_crontab:
             - [backup, 'backupuser@192.168.1.10:/var', remote_1/]
         - name: REMOTE_2
           points:
-            - [backup, 'backupuser@192.168.1.20:/home', remote_1/]
-            - [backup, 'backupuser@192.168.1.20:/etc', remote_1/]
-            - [backup, 'backupuser@192.168.1.20:/var', remote_1/]
+            - [backup, 'backupuser@192.168.1.20:/home', remote_2/]
+            - [backup, 'backupuser@192.168.1.20:/etc', remote_2/]
+            - [backup, 'backupuser@192.168.1.20:/var', remote_2/]
 ```
 
 `192.168.1.10` and `192.168.1.20` hosts should be managed with the
