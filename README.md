@@ -1,14 +1,63 @@
 # rsnapshot (master)
 
-Ansible role to install and configure rsnapshot.
-This role generates a SSH key for the `root` system user helping to backup
-remote hosts. The public key will be used by the `rsnapshot-slave` role to
-set up a backup system user.
+Ansible role to install and configure a *rsnapshot* master. It works in
+conjunction with the `rsnapshot-slave` role.
+
+`rsnapshot-master` generates a SSH key for the `root` system user, and
+`rsnapshot-slave` is charged to set up the public key for a dedicated backup
+system user (with limited access rights) on remote hosts.
 
 ## Supported Platforms
 
-- Debian Wheezy (7)
-- Ubuntu Trusty (14.04)
+* Debian
+    - squeeze   (6)
+    - wheezy    (7)
+    - jessie    (8)
+* Ubuntu
+    - precise   (12.04)
+    - trusty    (14.04)
+
+## Example (Playbook)
+
+```yaml
+- name: Backup Master
+  hosts: backup_master
+  sudo: yes
+  roles:
+    - rsnapshot-master
+  vars:
+    - rsnapshot_config_backup:
+        - name: LOCALHOST
+          points:
+            - [backup, /home/, localhost/]
+            - [backup, /etc/, localhost/]
+            - [backup, /usr/local/, localhost/]
+        - name: REMOTE_1
+          points:
+            - [backup, 'backupuser@192.168.1.10:/home', remote_1/]
+            - [backup, 'backupuser@192.168.1.10:/etc', remote_1/]
+            - [backup, 'backupuser@192.168.1.10:/var', remote_1/]
+        - name: REMOTE_2
+          points:
+            - [backup, 'backupuser@192.168.1.20:/home', remote_2/]
+            - [backup, 'backupuser@192.168.1.20:/etc', remote_2/]
+            - [backup, 'backupuser@192.168.1.20:/var', remote_2/]
+```
+
+`192.168.1.10` and `192.168.1.20` hosts should be managed with the
+`rsnapshot-slave` role, as below:
+
+```yaml
+- name: Hosts to backup
+  hosts: remote_1:remote_2
+  sudo: yes
+  roles:
+    - rsnapshot-slave
+  vars:
+    - rsnapshot_master_host: backup_master
+```
+
+See the `rsnapshot-slave` role for details about the slave configuration.
 
 ## Variables
 
@@ -96,45 +145,3 @@ rsnapshot_crontab:
       minute: 30
       job: "/usr/bin/rsnapshot monthly"
 ```
-
-## Example (Playbook)
-
-```yaml
-- name: Backup Master
-  hosts: backup_master
-  sudo: yes
-  roles:
-    - rsnapshot-master
-  vars:
-    - rsnapshot_config_backup:
-        - name: LOCALHOST
-          points:
-            - [backup, /home/, localhost/]
-            - [backup, /etc/, localhost/]
-            - [backup, /usr/local/, localhost/]
-        - name: REMOTE_1
-          points:
-            - [backup, 'backupuser@192.168.1.10:/home', remote_1/]
-            - [backup, 'backupuser@192.168.1.10:/etc', remote_1/]
-            - [backup, 'backupuser@192.168.1.10:/var', remote_1/]
-        - name: REMOTE_2
-          points:
-            - [backup, 'backupuser@192.168.1.20:/home', remote_2/]
-            - [backup, 'backupuser@192.168.1.20:/etc', remote_2/]
-            - [backup, 'backupuser@192.168.1.20:/var', remote_2/]
-```
-
-`192.168.1.10` and `192.168.1.20` hosts should be managed with the
-`rsnapshot-slave` role, like this:
-
-```yaml
-- name: Hosts to backup
-  hosts: remote_host_1:remote_host_2
-  sudo: yes
-  roles:
-    - rsnapshot-slave
-  vars:
-    - rsnapshot_master_host: backup_master
-```
-
-See the `rsnapshot-slave` role for details.
