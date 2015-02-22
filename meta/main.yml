@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Sébastien Alix
+  description: Ansible role to install and configure a rsnapshot master.
+      It works in conjunction with the rsnapshot-slave role.
+  company: OSIELL
+  license: GPLv3
+  min_ansible_version: 1.4
+  platforms:
+    - name: Debian
+      versions:
+        - squeeze
+        - wheezy
+        - jessie
+    - name: Ubuntu
+      versions:
+        - precise
+        - trusty
+  categories:
+    - system
+dependencies: []
