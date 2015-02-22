@@ -1,4 +1,4 @@
-# rsnapshot (master)
+# rsnapshot (master) [![Build Status](https://travis-ci.org/osiell/ansible-rsnapshot-master.png)](https://travis-ci.org/osiell/ansible-rsnapshot-master)
 
 Ansible role to install and configure a *rsnapshot* master. It works in
 conjunction with the `rsnapshot-slave` role.
@@ -6,6 +6,8 @@ conjunction with the `rsnapshot-slave` role.
 `rsnapshot-master` generates a SSH key for the `root` system user, and
 `rsnapshot-slave` is charged to set up the public key for a dedicated backup
 system user (with limited access rights) on remote hosts.
+
+Minimum Ansible Version: 1.4
 
 ## Supported Platforms
 
