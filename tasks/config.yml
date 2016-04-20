@@ -25,4 +25,4 @@
         hour={{ item.get('hour', '*') }}
         minute={{ item.get('minute', '*') }}
         job="{{ item.get('job', '*') }}"
-  with_items: rsnapshot_crontab
+  with_items: "{{ rsnapshot_crontab }}"
