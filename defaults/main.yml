@@ -34,7 +34,7 @@ rsnapshot_config_lockfile: /var/run/rsnapshot.pid
 rsnapshot_config_stop_on_stale_lockfile: 0
 rsnapshot_config_rsync_short_args: False
 rsnapshot_config_rsync_long_args: '--delete --numeric-ids --relative --delete-excluded --rsync-path=rsync-wrapper.sh'
-rsnapshot_config_ssh_args: '-i $HOME/.ssh/{{ rsnapshot_ssh_key }}'
+rsnapshot_config_ssh_args: '-i /root/.ssh/{{ rsnapshot_ssh_key }}'
 rsnapshot_config_du_args: False
 rsnapshot_config_one_fs: False
 rsnapshot_config_include: []
