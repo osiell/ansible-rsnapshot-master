@@ -228,7 +228,7 @@ include_file	{{ rsnapshot_config_include_file }}
 #include_file	/path/to/include/file
 {% endif %}
 {% if rsnapshot_config_exclude_file %}
-include_file	{{ rsnapshot_config_exclude_file }}
+exclude_file	{{ rsnapshot_config_exclude_file }}
 {% else %}
 #exclude_file	/path/to/exclude/file
 {% endif %}
