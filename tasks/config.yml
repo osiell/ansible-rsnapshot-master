@@ -16,7 +16,7 @@
     - rsnapshot_config_file
 
 - name: Configure cron
-  cron: name="{{ item.name }}"
+  cron: name={{ item.name }}
         user=root
         cron_file=ansible_rsnapshot
         month={{ item.get('month', '*') }}
@@ -25,4 +25,4 @@
         hour={{ item.get('hour', '*') }}
         minute={{ item.get('minute', '*') }}
         job="{{ item.get('job', '*') }}"
-  with_items: rsnapshot_crontab
+  with_items: "{{ rsnapshot_crontab }}"
