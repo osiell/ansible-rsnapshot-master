@@ -16,7 +16,7 @@
     - rsnapshot_config_file
 
 - name: Configure cron
-  cron: name="{{ item.name }}"
+  cron: name={{ item.name }}
         user=root
         cron_file=ansible_rsnapshot
         month={{ item.get('month', '*') }}
