@@ -3,10 +3,6 @@ language: python
 python: "2.7"
 
 env:
-  - ANSIBLE_VERSION="1.4,<1.5"
-  - ANSIBLE_VERSION="1.5,<1.6"
-  - ANSIBLE_VERSION="1.6,<1.7"
-  - ANSIBLE_VERSION="1.7,<1.8"
   - ANSIBLE_VERSION="1.8,<1.9"
   - ANSIBLE_VERSION="1.9,<2.0"
   - ANSIBLE_VERSION="2.0,<2.1"
