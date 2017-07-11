@@ -15,6 +15,7 @@ Minimum Ansible Version: 1.4
     - squeeze   (6)
     - wheezy    (7)
     - jessie    (8)
+    - stretch   (9)
 * Ubuntu
     - precise   (12.04)
     - trusty    (14.04)
