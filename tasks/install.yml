@@ -5,3 +5,9 @@
         state=installed
         update_cache={{ rsnapshot_apt_update_cache }}
         cache_valid_time={{ rsnapshot_apt_cache_valid_time }}
+
+- name: Install sudo
+  apt:
+    pkg: sudo
+    state: present
+  when: rsnapshot_master_host_user != 'root' and rsnapshot_master_host_user_uses_sudo

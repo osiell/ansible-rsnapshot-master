@@ -34,3 +34,33 @@
         minute={{ item.get('minute', '*') }}
         job="{{ item.get('job', '*') }}"
   with_items: "{{ rsnapshot_crontab }}"
+
+- name: Create default log folder (needed if not run as root)
+  file:
+    state: directory
+    path: "{{ rsnapshot_config_logfile | dirname }}"
+    owner: "{{ rsnapshot_master_host_user }}"
+    group: "{{ rsnapshot_master_host_user }}"
+    mode: 0700
+  when: rsnapshot_config_logfile | dirname != '/var/log'
+
+- name: Create default run folder (needed if not run as root)
+  file:
+    state: directory
+    path: "{{ rsnapshot_config_logfile | dirname }}"
+    owner: "{{ rsnapshot_master_host_user }}"
+    group: "{{ rsnapshot_master_host_user }}"
+    mode: 0700
+  when: rsnapshot_config_lockfile | dirname != '/run' and rsnapshot_config_lockfile | dirname != '/var/run'
+
+# on ubuntu, /var/run is tmpfs, so subdirectories are removed on reboot
+- name: Ensure the run folder is created on boot
+  template:
+    src: ./templates/tmpfiles.d_rsnapshot.conf
+    dest: /usr/lib/tmpfiles.d/rsnapshot.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: rsnapshot_config_lockfile | dirname != '/run' and rsnapshot_config_lockfile | dirname != '/var/run' and rsnapshot_config_lockfile | dirname | regex_search("^(/var)?/run/")
+  tags: ['new']
+

@@ -9,3 +9,9 @@
   tags:
     - rsnapshot
     - rsnapshot_config
+
+- include: not-root.yml
+  when: rsnapshot_master_host_user != 'root'
+  tags:
+    - rsnapshot
+    - rsnapshot_config
