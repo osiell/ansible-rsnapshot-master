@@ -71,7 +71,7 @@ See the `rsnapshot-slave` role for details about the slave configuration.
 ```yaml
 # SSH key for the 'root' user, the public one should be set on remote
 # servers to backup (see the role 'rsnapshot-slave')
-rsnapshot_ssh_key: id_rsa
+rsnapshot_master_ssh_key: id_rsa
 rsnapshot_master_host_user:  root
 
 # This is needed if you plan to backup localhost files as non root user
@@ -107,7 +107,7 @@ rsnapshot_config_lockfile: /var/run/rsnapshot.pid
 rsnapshot_config_stop_on_stale_lockfile: 0
 rsnapshot_config_rsync_short_args: False
 rsnapshot_config_rsync_long_args: '--delete --numeric-ids --relative --delete-excluded --rsync-path=rsync-wrapper.sh'
-rsnapshot_config_ssh_args: '-i $HOME/.ssh/{{ rsnapshot_ssh_key }}'
+rsnapshot_config_ssh_args: '-i $HOME/.ssh/{{ rsnapshot_master_ssh_key }}'
 rsnapshot_config_du_args: False
 rsnapshot_config_one_fs: False
 rsnapshot_config_include: []
