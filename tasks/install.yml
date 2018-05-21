@@ -2,7 +2,7 @@
 
 - name: Install rsnapshot
   apt:  pkg=rsnapshot
-        state=installed
+        state=present
         update_cache={{ rsnapshot_apt_update_cache }}
         cache_valid_time={{ rsnapshot_apt_cache_valid_time }}
 
