@@ -6,7 +6,7 @@ rsnapshot_master_ssh_key: id_rsa
 rsnapshot_master_host_user:  root
 
 # This is needed if you plan to backup localhost files as non root user
-rsnapshot_master_host_user_uses_sudo: True
+rsnapshot_master_host_user_uses_sudo: False
 
 # rsnapshot options
 rsnapshot_config_file: /etc/rsnapshot.conf
