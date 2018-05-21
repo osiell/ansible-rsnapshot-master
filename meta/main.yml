@@ -15,8 +15,8 @@ galaxy_info:
         - stretch
     - name: Ubuntu
       versions:
-        - precise
         - trusty
+        - bionic
   categories:
     - system
 dependencies: []
