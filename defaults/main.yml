@@ -2,7 +2,7 @@
 
 # SSH key for the 'root' user, the public one should be set on remote
 # servers to backup (see the role 'rsnapshot-slave')
-rsnapshot_ssh_key: id_rsa
+rsnapshot_master_ssh_key: id_rsa
 rsnapshot_master_host_user:  "{{ ansible_ssh_user }}"
 
 # rsnapshot options

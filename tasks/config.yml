@@ -3,7 +3,7 @@
 - name: "Create a SSH key for master user {{rsnapshot_master_host_user}}"
   user: name="{{rsnapshot_master_host_user}}"
         generate_ssh_key=yes
-        ssh_key_file=.ssh/{{ rsnapshot_ssh_key }}
+        ssh_key_file=.ssh/{{ rsnapshot_master_ssh_key }}
   when: rsnapshot_ssh_key != False
   tags:
     - rsnapshot_config_ssh
