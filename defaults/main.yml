@@ -3,7 +3,7 @@
 # SSH key for the 'root' user, the public one should be set on remote
 # servers to backup (see the role 'rsnapshot-slave')
 rsnapshot_master_ssh_key: id_rsa
-rsnapshot_master_host_user:  root
+rsnapshot_master_host_user: root
 
 # This is needed if you plan to backup localhost files as non root user
 rsnapshot_master_host_user_uses_sudo: False
