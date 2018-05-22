@@ -5,6 +5,7 @@
     name: "{{rsnapshot_master_host_user}}"
     generate_ssh_key: yes
     ssh_key_file: ".ssh/{{ rsnapshot_master_ssh_key }}"
+    ssh_key_comment: "rsnapshot master user {{ rsnapshot_master_host_user }} at {{ inventory_hostname }}"
   when: rsnapshot_master_ssh_key != False
   tags:
     - rsnapshot_config_ssh
