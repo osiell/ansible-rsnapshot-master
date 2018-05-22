@@ -54,7 +54,7 @@
 - name: Create default run folder (needed if not run as root)
   file:
     state: directory
-    path: "{{ rsnapshot_config_logfile | dirname }}"
+    path: "{{ rsnapshot_config_lockfile | dirname }}"
     owner: "{{ rsnapshot_master_host_user }}"
     group: "{{ rsnapshot_master_host_user }}"
     mode: 0700
