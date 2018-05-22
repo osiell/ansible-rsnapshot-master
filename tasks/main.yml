@@ -11,7 +11,7 @@
     - rsnapshot_config
 
 - include: not-root.yml
-  when: rsnapshot_master_host_user != 'root'
+  when: rsnapshot_master_host_user != 'root' and rsnapshot_master_host_user_uses_sudo
   tags:
     - rsnapshot
     - rsnapshot_config
