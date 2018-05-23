@@ -3,7 +3,7 @@
 - name: Sudo configuration for the backup system user
   template:
     src: sudo_backupuser
-    dest: "/etc/sudoers.d/{{ rsnapshot_slave_user }}"
+    dest: "/etc/sudoers.d/{{ rsnapshot_master_host_user }}"
     owner: root
     group: root
     mode: 0440
