@@ -1,6 +1,7 @@
 ---
 
 - hosts: localhost
+  become: True
   remote_user: root
   roles:
     - ansible-rsnapshot-master

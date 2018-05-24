@@ -71,4 +71,3 @@
     mode: 0644
   when: rsnapshot_config_lockfile | dirname != '/run' and rsnapshot_config_lockfile | dirname != '/var/run' and rsnapshot_config_lockfile | dirname | regex_search("^(/var)?/run/")
   tags: ['new']
-
