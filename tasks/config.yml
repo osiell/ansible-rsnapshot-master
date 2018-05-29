@@ -23,7 +23,7 @@
 
 - name: Configure cron (environment variables)
   cron:
-    cron_file: ansible_rsnapshot
+    cron_file: "{{ rsnapshot_cron_file }}"
     user: "{{rsnapshot_master_host_user}}"
     name: "{{ item.key }}"
     value: "{{ item.value }}"
@@ -34,7 +34,7 @@
   cron:
     name: "{{ item.name }}"
     user: "{{rsnapshot_master_host_user}}"
-    cron_file: ansible_rsnapshot
+    cron_file: "{{ rsnapshot_cron_file }}"
     month: "{{ item.get('month', '*') }}"
     weekday: "{{ item.get('weekday', '*') }}"
     day: "{{ item.get('day', '*') }}"

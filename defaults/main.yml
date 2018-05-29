@@ -59,6 +59,7 @@ rsnapshot_config_backup:
           - [backup, /usr/local/, localhost/]
 
 # rsnapshot crontab
+rsnapshot_cron_file: ansible_rsnapshot
 rsnapshot_crontab_env: {}
 rsnapshot_crontab:
     - name: hourly
