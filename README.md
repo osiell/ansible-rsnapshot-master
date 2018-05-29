@@ -3,9 +3,13 @@
 Ansible role to install and configure a *rsnapshot* master. It works in
 conjunction with the `rsnapshot-slave` role.
 
-`rsnapshot-master` generates a SSH key for the `root` system user, and
-`rsnapshot-slave` is charged to set up the public key for a dedicated backup
-system user (with limited access rights) on remote hosts.
+`rsnapshot-master` generates a SSH key for the `"{{rsnapshot_master_host_user}}"` system user which is by default `root`, and
+`rsnapshot-slave` is charged to set up the public key for a dedicated backup system user (with limited access rights) on remote hosts.
+
+### Running as non root user
+
+This version allows you to run `rsnapshot` as a non-root user. In this case, you need to enable `rsnapshot_master_host_user_uses_sudo` if you want
+to perform localhost backup also. 
 
 Minimum Ansible Version: 1.4
 
@@ -67,7 +71,11 @@ See the `rsnapshot-slave` role for details about the slave configuration.
 ```yaml
 # SSH key for the 'root' user, the public one should be set on remote
 # servers to backup (see the role 'rsnapshot-slave')
-rsnapshot_ssh_key: id_rsa
+rsnapshot_master_ssh_key: id_rsa
+rsnapshot_master_host_user:  root
+
+# This is needed if you plan to backup localhost files as non root user
+rsnapshot_master_host_user_uses_sudo: False
 
 # rsnapshot options
 rsnapshot_config_file: /etc/rsnapshot.conf
@@ -99,7 +107,7 @@ rsnapshot_config_lockfile: /var/run/rsnapshot.pid
 rsnapshot_config_stop_on_stale_lockfile: 0
 rsnapshot_config_rsync_short_args: False
 rsnapshot_config_rsync_long_args: '--delete --numeric-ids --relative --delete-excluded --rsync-path=rsync-wrapper.sh'
-rsnapshot_config_ssh_args: '-i $HOME/.ssh/{{ rsnapshot_ssh_key }}'
+rsnapshot_config_ssh_args: '-i $HOME/.ssh/{{ rsnapshot_master_ssh_key }}'
 rsnapshot_config_du_args: False
 rsnapshot_config_one_fs: False
 rsnapshot_config_include: []

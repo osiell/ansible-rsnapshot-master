@@ -2,7 +2,11 @@
 
 # SSH key for the 'root' user, the public one should be set on remote
 # servers to backup (see the role 'rsnapshot-slave')
-rsnapshot_ssh_key: id_rsa
+rsnapshot_master_ssh_key: id_rsa
+rsnapshot_master_host_user: root
+
+# This is needed if you plan to backup localhost files as non root user
+rsnapshot_master_host_user_uses_sudo: False
 
 # rsnapshot options
 rsnapshot_config_file: /etc/rsnapshot.conf
@@ -29,12 +33,14 @@ rsnapshot_config_intervals:
       value: 3
 rsnapshot_config_verbose: 2
 rsnapshot_config_loglevel: 3
-rsnapshot_config_logfile: /var/log/rsnapshot.log
-rsnapshot_config_lockfile: /var/run/rsnapshot.pid
+rsnapshot_config_logfile: /var/log/rsnapshot/rsnapshot.log
+rsnapshot_config_lockfile: /var/run/rsnapshot/rsnapshot.pid
 rsnapshot_config_stop_on_stale_lockfile: 0
 rsnapshot_config_rsync_short_args: False
 rsnapshot_config_rsync_long_args: '--delete --numeric-ids --relative --delete-excluded --rsync-path=rsync-wrapper.sh'
-rsnapshot_config_ssh_args: '-i /root/.ssh/{{ rsnapshot_ssh_key }}'
+rsnapshot_config_rsync_long_args_not_root: "--fake-super {{rsnapshot_config_rsync_long_args}}"
+rsnapshot_config_ssh_args: '-i /root/.ssh/{{ rsnapshot_master_ssh_key }}'
+rsnapshot_config_ssh_args_not_root: "-i /home/{{rsnapshot_master_host_user}}/.ssh/{{ rsnapshot_master_ssh_key }}"
 rsnapshot_config_du_args: False
 rsnapshot_config_one_fs: False
 rsnapshot_config_include: []
@@ -53,6 +59,7 @@ rsnapshot_config_backup:
           - [backup, /usr/local/, localhost/]
 
 # rsnapshot crontab
+rsnapshot_cron_file: ansible_rsnapshot
 rsnapshot_crontab_env: {}
 rsnapshot_crontab:
     - name: hourly

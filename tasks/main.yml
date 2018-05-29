@@ -1,11 +1,17 @@
 ---
 
-- include: install.yml
+- import_tasks: install.yml
   tags:
     - rsnapshot
     - rsnapshot_install
 
-- include: config.yml
+- import_tasks: config.yml
+  tags:
+    - rsnapshot
+    - rsnapshot_config
+
+- include_tasks: not-root.yml
+  when: rsnapshot_master_host_user != 'root' and rsnapshot_master_host_user_uses_sudo
   tags:
     - rsnapshot
     - rsnapshot_config

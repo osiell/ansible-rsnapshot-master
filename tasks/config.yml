@@ -1,36 +1,73 @@
 ---
 
-- name: Create a SSH key for 'root'
-  user: name=root
-        generate_ssh_key=yes
-        ssh_key_file=.ssh/{{ rsnapshot_ssh_key }}
-  when: rsnapshot_ssh_key != False
+- name: "Create a SSH key for master user {{rsnapshot_master_host_user}}"
+  user:
+    name: "{{rsnapshot_master_host_user}}"
+    generate_ssh_key: yes
+    ssh_key_file: ".ssh/{{ rsnapshot_master_ssh_key }}"
+    ssh_key_comment: "rsnapshot master user {{ rsnapshot_master_host_user }} at {{ inventory_hostname }}"
+  when: rsnapshot_master_ssh_key != False
   tags:
     - rsnapshot_config_ssh
 
 - name: Configure rsnapshot
-  template: src=rsnapshot.conf.j2 dest={{ rsnapshot_config_file }}
-        owner=root group=root mode=0644
-        backup=yes
+  template:
+    src: rsnapshot.conf.j2
+    dest: "{{ rsnapshot_config_file }}"
+    owner: "{{rsnapshot_master_host_user}}"
+    group: root
+    mode: 0644
+    backup: yes
   tags:
     - rsnapshot_config_file
 
 - name: Configure cron (environment variables)
-  cron: cron_file=ansible_rsnapshot
-        user=root
-        name={{ item.key }}
-        value={{ item.value }}
-        env=yes
+  cron:
+    cron_file: "{{ rsnapshot_cron_file }}"
+    user: "{{rsnapshot_master_host_user}}"
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    env: yes
   with_dict: "{{ rsnapshot_crontab_env }}"
 
 - name: Configure cron
-  cron: name={{ item.name }}
-        user=root
-        cron_file=ansible_rsnapshot
-        month={{ item.get('month', '*') }}
-        weekday={{ item.get('weekday', '*') }}
-        day={{ item.get('day', '*') }}
-        hour={{ item.get('hour', '*') }}
-        minute={{ item.get('minute', '*') }}
-        job="{{ item.get('job', '*') }}"
+  cron:
+    name: "{{ item.name }}"
+    user: "{{rsnapshot_master_host_user}}"
+    cron_file: "{{ rsnapshot_cron_file }}"
+    month: "{{ item.get('month', '*') }}"
+    weekday: "{{ item.get('weekday', '*') }}"
+    day: "{{ item.get('day', '*') }}"
+    hour: "{{ item.get('hour', '*') }}"
+    minute: "{{ item.get('minute', '*') }}"
+    job: "{{ item.get('job', '*') }}"
   with_items: "{{ rsnapshot_crontab }}"
+
+- name: Create default log folder (needed if not run as root)
+  file:
+    state: directory
+    path: "{{ rsnapshot_config_logfile | dirname }}"
+    owner: "{{ rsnapshot_master_host_user }}"
+    group: "{{ rsnapshot_master_host_user }}"
+    mode: 0700
+  when: rsnapshot_config_logfile | dirname != '/var/log'
+
+- name: Create default run folder (needed if not run as root)
+  file:
+    state: directory
+    path: "{{ rsnapshot_config_lockfile | dirname }}"
+    owner: "{{ rsnapshot_master_host_user }}"
+    group: "{{ rsnapshot_master_host_user }}"
+    mode: 0700
+  when: rsnapshot_config_lockfile | dirname != '/run' and rsnapshot_config_lockfile | dirname != '/var/run'
+
+# on ubuntu, /var/run is tmpfs, so subdirectories are removed on reboot
+- name: Ensure the run folder is created on boot
+  template:
+    src: ./templates/tmpfiles.d_rsnapshot.conf
+    dest: /usr/lib/tmpfiles.d/rsnapshot.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: rsnapshot_config_lockfile | dirname != '/run' and rsnapshot_config_lockfile | dirname != '/var/run' and rsnapshot_config_lockfile | dirname | regex_search("^(/var)?/run/")
+  tags: ['new']

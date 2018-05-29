@@ -48,7 +48,7 @@ cmd_rm		{{ rsnapshot_config_cmd_rm }}
 # rsync must be enabled for anything to work. This is the only command that
 # must be enabled.
 #
-cmd_rsync	{{ rsnapshot_config_cmd_rsync }}
+cmd_rsync	{%if rsnapshot_master_host_user_uses_sudo and rsnapshot_master_host_user != 'root' %}/usr/local/bin/rsync-wrapper.sh{%else%}{{ rsnapshot_config_cmd_rsync }}{%endif%}
 
 # Uncomment this to enable remote ssh backups over rsync.
 #
@@ -170,7 +170,11 @@ rsync_short_args	{{ rsnapshot_config_rsync_short_args }}
 #rsync_short_args	-a
 {% endif %}
 {% if rsnapshot_config_rsync_long_args %}
+{% if rsnapshot_master_host_user == 'root' or rsnapshot_master_host_user_uses_sudo %}
 rsync_long_args	{{ rsnapshot_config_rsync_long_args }}
+{%else%}
+rsync_long_args	{{ rsnapshot_config_rsync_long_args_not_root }}
+{%endif%}
 {% else %}
 #rsync_long_args	--delete --numeric-ids --relative --delete-excluded
 {% endif %}
@@ -178,7 +182,11 @@ rsync_long_args	{{ rsnapshot_config_rsync_long_args }}
 # ssh has no args passed by default, but you can specify some here.
 #
 {% if rsnapshot_config_ssh_args %}
+{% if rsnapshot_master_host_user == 'root' %}
 ssh_args	{{ rsnapshot_config_ssh_args }}
+{%else%}
+ssh_args	{{ rsnapshot_config_ssh_args_not_root }}
+{%endif%}
 {% else %}
 #ssh_args	-p 22
 {% endif %}
