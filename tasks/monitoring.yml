@@ -1,0 +1,40 @@
+---
+
+- set_fact: {"check_{{cron.name}}_name": "{{inventory_hostname}} > Rsnapshot {{cron.name}} "}
+
+- name: Create rsnaphsot healthcheck monitor
+  uri:
+    url: https://healthchecks.io/api/v1/checks/
+    method: POST
+    headers:
+      X-Api-Key: "{{ healthchecks_api_key }}"
+    body_format: json
+    body:
+      name: "{{ lookup('vars', 'check_' + cron.name + '_name' ) }}"
+      unique:
+        - name
+    status_code:
+      - 200 #created
+      - 201 #existing
+  register: healthcehck_create_response
+  check_mode: no
+
+- name: Update rsnapshot healthcheck monitor
+  uri:
+    url: "{{healthcehck_create_response.json.update_url}}"
+    method: POST
+    headers:
+      X-Api-Key: "{{ healthchecks_api_key }}"
+    body_format: json
+    body:
+      name: "{{ lookup('vars', 'check_' + cron.name + '_name') }}"
+      tags: "rsnapshot"
+      schedule: "{{ cron.minute }} {{ cron.hour }} {{ cron.day }} {{ cron.weekday }} {{ cron.month }}"
+      channels: "*"
+      unique:
+      - "name"
+  check_mode: no
+
+- name: Register rsnapshot check command
+  set_fact: {"check_{{cron.name}}_cmd": " && curl -fsS --retry 3 {{ healthcehck_create_response.json.ping_url }} > /dev/null" }
+
