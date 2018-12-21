@@ -31,6 +31,7 @@
       tags: "rsnapshot"
       schedule: "{{ cron.minute }} {{ cron.hour }} {{ cron.day }} {{ cron.weekday }} {{ cron.month }}"
       channels: "*"
+      tz: "{{ server_timezone|default('UTC') }}"
       unique:
       - "name"
   check_mode: no
