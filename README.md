@@ -156,3 +156,8 @@ rsnapshot_crontab:
       minute: 30
       job: "/usr/bin/rsnapshot monthly"
 ```
+
+## Healthcheck.io monitoring
+
+By providing your healthcheck.io API key in the variable `healthchecks_api_key`, health checks will be automatically created 
+on healthcheck.io and appened to the cron tasks.
