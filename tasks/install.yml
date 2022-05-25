@@ -1,11 +1,28 @@
 ---
 
 - name: Install rsnapshot
-  apt:
-    pkg: rsnapshot
-    state: present
-    update_cache: "{{ rsnapshot_apt_update_cache }}"
-    cache_valid_time: "{{ rsnapshot_apt_cache_valid_time }}"
+  block:
+    - name: Install rsnapshot by apt
+      apt:
+        pkg: rsnapshot
+        state: present
+        update_cache: "{{ rsnapshot_apt_update_cache }}"
+        cache_valid_time: "{{ rsnapshot_apt_cache_valid_time }}"
+  rescue:
+    - name: Download rsnapshot deb
+      get_url: url={{ item }}
+               dest={{ rsnapshot_dest }}
+               force=yes
+      with_items: "{{ rsnapshot_urls }}"
+      ignore_errors: True
+    - name: Check rsnapshot package
+      stat: path={{ rsnapshot_dest }}
+      register: rsnapshot_pkg
+    - name: Install rsnapshot (Debian package)
+      apt:
+        deb: "{{ rsnapshot_dest }}"
+        force: yes
+      when: rsnapshot_version is defined and rsnapshot_version != False and rsnapshot_pkg.stat.exists and rsnapshot_pkg.stat.mimetype in ['application/x-debian-package', 'application/vnd.debian.binary-package']
 
 - name: Install sudo
   apt:

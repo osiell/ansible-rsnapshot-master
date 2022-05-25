@@ -1,5 +1,12 @@
 ---
 
+# Package download
+rsnapshot_version: 1.4.4
+rsnapshot_urls:
+    # Debian packages
+    - https://rsnapshot.org/downloads/rsnapshot_{{ rsnapshot_version }}-1_all.deb
+rsnapshot_dest: "/opt/rsnapshot-{{ rsnapshot_version }}"
+
 # SSH key for the 'root' user, the public one should be set on remote
 # servers to backup (see the role 'rsnapshot-slave')
 rsnapshot_master_ssh_key: id_rsa
