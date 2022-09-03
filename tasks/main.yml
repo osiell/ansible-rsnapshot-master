@@ -5,6 +5,16 @@
     - rsnapshot
     - rsnapshot_install
 
+- name: add healthcheck to crontab execution
+  include: monitoring.yml
+  loop_control:
+    loop_var: cron
+  with_items: "{{ rsnapshot_crontab }}"
+  when: healthchecks_api_key is defined
+  tags:
+  - rsnapshot
+  - rsnapshot_config
+
 - import_tasks: config.yml
   tags:
     - rsnapshot

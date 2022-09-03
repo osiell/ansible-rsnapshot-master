@@ -40,7 +40,7 @@
     day: "{{ item.get('day', '*') }}"
     hour: "{{ item.get('hour', '*') }}"
     minute: "{{ item.get('minute', '*') }}"
-    job: "{{ item.get('job', '*') }}"
+    job: "{{ item.get('job', '*') }} {{ lookup('vars', 'check_' + item.name + '_cmd', default='') }}"
   with_items: "{{ rsnapshot_crontab }}"
 
 - name: Create default log folder (needed if not run as root)
